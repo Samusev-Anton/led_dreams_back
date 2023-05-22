@@ -49,7 +49,8 @@ class UserController {
   async logout(req, res) {}
 
   async current(req, res) {
-    res.status(200).json("wegwaveih");
+    const token = generateJwt(req.user.id, req.user.email, req.user.role);
+    return res.status(201).json({ token });
   }
 }
 
