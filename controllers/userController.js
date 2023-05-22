@@ -27,7 +27,24 @@ class UserController {
     return res.status(201).json({ result: { user, basket, token } });
   }
 
-  async signin(req, res) {}
+  async signin(req, res, next) {
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+    const hashPassword = await bcrypt.hash(password, 5);
+    if (!user) {
+      return next(
+        ApiError.badRequest(
+          `User with email:${email} dont exist! Please register`
+        )
+      );
+    }
+    let comparePassword = bcrypt.compareSync(password, user.password);
+    if (!comparePassword) {
+      return next(ApiError.badRequest(`Password is wrong`));
+    }
+    const token = generateJwt(user.id, user.email, user.role);
+    return res.status(201).json({ token });
+  }
 
   async logout(req, res) {}
 
