@@ -70,12 +70,10 @@ class DeviceController {
 
   async getDeviceById(req, res) {
     const { id } = req.params;
-    console.log(id);
     const device = await Device.findOne({
       where: { id },
       include: [{ model: DeviceInfo, as: "info" }],
     });
-    console.log(device);
 
     return res.status(200).json(device);
   }
