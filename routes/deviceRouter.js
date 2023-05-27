@@ -1,12 +1,14 @@
 const Router = require("express");
 const router = new Router();
+
+const getRoleMiddleware = require("../middlewares/getRoleMiddleware");
 const {
   getDevice,
   getDeviceById,
   addDevice,
 } = require("../controllers/deviceController");
 
-router.post("/", addDevice);
+router.post("/", getRoleMiddleware("ADMIN"), addDevice);
 router.get("/", getDevice);
 router.get("/:id", getDeviceById);
 
